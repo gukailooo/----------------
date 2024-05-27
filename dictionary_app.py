@@ -5,22 +5,12 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QSpinBox, QLabel, QMessageBox, QInputDialog
 from decimal import Decimal, getcontext
 from functools import reduce
+import math
+from mpmath import *
 
-
-'''
-Функции
-'''
-def sqrt_with_precision(get_number, precision=64):
-    # Устанавливаем уровень точности
-    getcontext().prec = precision - 1  # Добавляем дополнительные цифры для точности в расчетах
-    
-    try:
-        return str(Decimal(get_number).sqrt())
-    except ValueError:
-        return "Нельзя извлечь корень"
     
 '''
-Приложение
+Программная реализация
 '''
 
 class MyApp(QWidget):
@@ -50,7 +40,8 @@ class MyApp(QWidget):
         layout.addWidget(self.spin_box)
         label2 = QLabel("Выберите каким способом сгенерировать пароли:")
         layout.addWidget(label2)
-        layout.addWidget(self.generate_button_with_sqrt)
+        layout.addWidget(self.generate_button_with_square_sqrt)
+        layout.addWidget(self.generate_button_with_cubic_sqrt)
         layout.addWidget(self.generate_button_with_const)
         
         self.setLayout(layout)
@@ -61,27 +52,40 @@ class MyApp(QWidget):
     def generate_passwords_with_square_sqrt(self):
         count = self.spin_box.value()
         if count >= 1:
-            with open('passwords.txt', 'w') as file:
+            with open('square_root_passwords.txt', 'w') as file:
                 for i in range(1, count+1):
-                    result = sqrt_with_precision(i, 64)
+                    result = "{:.62f}".format(math.sqrt(i))
                     if result!= "Нельзя извлечь корень":
                         file.write(f"{i}: {result}\n")
             QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
 
+
     def generate_passwords_with_cubic_sqrt(self):
         count = self.spin_box.value()
         if count >= 1:
-            with
-        result = pow(9, 1/3)
-        formatted_result = "{:.64f}".format(result)
-        return formatted_result
+            with open('cubic_root_passwords.txt', 'w') as file:
+                for i in range(1, count+1):
+                    # Вычисляем кубический корень числа i и форматируем результат до 64 знаков после запятой
+                    result = "{:.62f}".format(pow(i, 1/3))
+                    file.write(f"{i}: {result}\n")
+            QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
+
 
     def generate_passwords_with_const(self):
-        # Отношение длины окружности к ее диаметру
-        value_pi = '3.14159265358979323846264338327950288419716939937510582097494459'
-        # Отношение длины окружности к ее радиусу. Эквивалентно 2pi
-        value_tau =  '6.28318530717958647692528676655900576839433879875021164194988918'
+        count = self.spin_box.value()
+        mp.dps = 63; mp.pretty = True
 
+        value_pi = +pi # Отношение длины окружности к ее диаметру
+        value_tau = 2*+pi # Отношение длины окружности к ее радиусу. Эквивалентно 2pi
+        
+        constants = [value_pi, value_tau]
+
+        if count >= 1:
+            with open('const_passwords.txt', 'w') as file:
+                for i in range(1, count+1):
+                    for j in constants:
+                        file.write(f"{i}: {j}\n")
+            QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
