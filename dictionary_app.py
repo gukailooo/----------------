@@ -400,6 +400,42 @@ class MyApp(QWidget):
             QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
 
 
+    def generate_passwords_with_recurrent_relations(self):
+        pass
+
+    
+    def fibonacci_recursive(n):
+        if n <= 0:
+            return 0
+        elif n == 1:
+            return 1
+        else:
+            return fibonacci_recursive(n-1) + fibonacci_recursive(n-2)
+
+    def generate_passwords_with_fibonacci_sequence(n):
+        array = []
+        for i in range(n + 1):
+            array.append(fibonacci_recursive(i))
+        return array
+
+    def generate_passwords_with_fibonacci(self):
+        # count = self.spin_box.value()
+
+
+        
+
+
+
+
+
+        # if count >= 1:
+        #     with open('network_and_protocol_const_passwords.txt', 'w') as file:
+        #         for name, value in .items():
+        #             file.write(f"{name} : {value}\n")
+        #     QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
+        pass
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
