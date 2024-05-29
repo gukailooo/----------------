@@ -35,8 +35,8 @@ class MyApp(QWidget):
         self.generate_button_with_math_const = QPushButton("Сгенерировать пароли из известных математических констант")
         self.generate_button_with_math_const.clicked.connect(self.generate_passwords_with_math_const)
 
-        self.generate_button_with_phys_const = QPushButton("Сгенерировать пароли из известных математических констант")
-        self.generate_button_with_const.clicked.connect(self.generate_passwords_with_const)
+        self.generate_button_with_physical_const = QPushButton("Сгенерировать пароли из известных физических констант")
+        self.generate_button_with_physical_const.clicked.connect(self.generate_passwords_with_physical_const)
 
         label1 = QLabel("Введите количество паролей, которые необходимо сгенерировать:")
         layout.addWidget(label1)
@@ -45,7 +45,8 @@ class MyApp(QWidget):
         layout.addWidget(label2)
         layout.addWidget(self.generate_button_with_square_sqrt)
         layout.addWidget(self.generate_button_with_cubic_sqrt)
-        layout.addWidget(self.generate_button_with_const)
+        layout.addWidget(self.generate_button_with_math_const)
+        layout.addWidget(self.generate_button_with_physical_const)
         
         self.setLayout(layout)
         self.setWindowTitle('Генератор паролей')
@@ -254,8 +255,147 @@ class MyApp(QWidget):
                           }
 
         if count >= 1:
-            with open('const_passwords.txt', 'w') as file:
+            with open('mathematics_const_passwords.txt', 'w') as file:
                 for name, value in mathematics_constants_dict.items():
+                    file.write(f"{name} : {value}\n")
+            QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
+
+    def generate_passwords_with_physical_const(self):
+        count = self.spin_box.value()
+
+        speed_of_light_in_vacuum = 299792458
+        Planck_constant = 6.62607015e-34
+        reduced_Planck_constant = 1.054571817e-34
+        vacuum_magnetic_permeability = 1.25663706127e-06
+        characteristic_impedance_of_vacuum = 376.730313412
+        vacuum_electric_permittivity = 8.8541878188e-12
+        Boltzmann_constant = 1.380649e-23
+        Newtonian_constant_of_gravitation = 6.6743e-11
+        Coulomb_constant = 8.9875517923e+09
+        cosmological_constant = 1.089e-52
+        Stefan_Boltzmann_constant = 5.670374419e-08
+        first_radiation_constant = 3.741771852e-16
+        first_radiation_constant_for_spectral_radiance = 1.191042972e-16
+        second_radiation_constant = 1.438776877e-02
+        Wien_wavelength_displacement_law_constant =2.897771955e-03
+        Wien_frequency_displacement_law_constant = 5.878925757e+10
+        Wien_entropy_displacement_law_constant = 3.002916077e-03
+        elementary_charge = 1.602176634e-19
+        conductance_quantum = 7.748091729e-05
+        inverse_conductance_quantum = 12906.40372
+        von_Klitzing_constant = 25812.80745
+        Josephson_constant = 4.835978484e+14
+        magnetic_flux_quantum = 2.067833848e-15
+        fine_structure_constant = 0.0072973525643
+        inverse_fine_structure_constant = 137.035999177
+        electron_mass = 9.1093837139e-31
+        muon_mass = 1.883531627e-28
+        tau_mass = 3.16754e-27
+        proton_mass = 1.67262192595e-27
+        neutron_mass = 1.67492750056e-27
+        top_quark_mass = 3.0784e-25
+        proton_to_electron_mass_ratio = 1836.152673426
+        W_to_Z_mass_ratio = 0.88145
+        weak_mixing_angle = 0.2229
+        electron_g_factor = -2.00231930436092
+        muon_g_factor = -2.00233184123
+        proton_g_factor = 5.5856946893
+        quantum_of_circulation = 3.6369475467e-04
+        Bohr_magneton = 9.2740100657e-24
+        nuclear_magneton = 5.0507837393e-27
+        classical_electron_radius = 2.8179403205e-15
+        Thomson_cross_section = 6.6524587051e-29
+        Bohr_radius = 5.29177210544e-11
+        Hartree_energy = 4.359744722206e-18
+        Rydberg_unit_of_energy = 2.179872361103e-18
+        Rydberg_constant = 10973731.568157
+        Fermi_coupling_constant = 1.1663787e-05
+        Avogadro_constant = 6.02214076e+23
+        molar_gas_constant = 8.31446261815324
+        Faraday_constant = 96485.33212331002
+        molar_Planck_constant = 3.9903127128934314e-10
+        atomic_mass_of_carbon_12 = 1.99264687992e-26
+        molar_mass_of_carbon_12 = 0.012
+        atomic_mass_constant = 1.66053906892e-27
+        molar_mass_constant = 0.001
+        molar_volume_of_silicon = 1.205883199e-05
+        hyperfine_transition_frequency_of_133Cs = 9192631770
+        the_fine_structure_constant = 7.2973525643e-3
+        Planck_mass = 2.176434e-8
+        Planck_length = 1.616255e-35
+        Planck_time = 5.391247e-44
+        Planck_temperature = 1.416784
+        The_temperature_of_the_triple_point_of_water = 273,16
+
+        physical_constants_dict = {'Скорость света в вакууме' : speed_of_light_in_vacuum,
+                                   'Постоянная Планка' : Planck_constant,
+                                   'Уменьшенная постоянная Планка' : reduced_Planck_constant,
+                                   'Магнитная проницаемость вакуума' : vacuum_magnetic_permeability,
+                                   'характеристическое сопротивление вакуума' : characteristic_impedance_of_vacuum,
+                                   'электрическая диэлектрическая проницаемость вакуума' : vacuum_electric_permittivity,
+                                   'Постоянная Больцмана' : Boltzmann_constant,
+                                   'Ньютоновская постоянная тяготения(гравитационная постоянная)' : Newtonian_constant_of_gravitation,
+                                   'Кулоновская постоянная' : Coulomb_constant,
+                                   'космологическая постоянная' : cosmological_constant,
+                                   'Постоянная Стефана–Больцмана' : Stefan_Boltzmann_constant,
+                                   'первая постоянная излучения' : first_radiation_constant,
+                                   'первая постоянная излучения для спектрального сияния' : first_radiation_constant_for_spectral_radiance,
+                                   'вторая постоянная излучения' : second_radiation_constant,
+                                   'Постоянная закона смещения длины волны Вина' : Wien_wavelength_displacement_law_constant,
+                                   'Постоянная закона частотного смещения Вина' : Wien_frequency_displacement_law_constant,
+                                   'Постоянная закона смещения энтропии Вина' : Wien_entropy_displacement_law_constant,
+                                   'элементарный заряд' : elementary_charge,
+                                   'квант проводимости' : conductance_quantum,
+                                   'квант обратной проводимости' : inverse_conductance_quantum,
+                                   'Постоянная вон Клицинга' : von_Klitzing_constant,
+                                   'Константа Джозефсона' : Josephson_constant,
+                                   'квант магнитного потока' : magnetic_flux_quantum,
+                                   'константа тонкой структуры' : fine_structure_constant,
+                                   'обратная константа тонкой структуры' : inverse_fine_structure_constant,
+                                   'масса электрона' : electron_mass,
+                                   'масса мюона' : muon_mass,
+                                   'масса тау' : tau_mass,
+                                   'масса протона' : proton_mass,
+                                   'масса нейтрона' : neutron_mass,
+                                   'масса верхнего кварка' : top_quark_mass,
+                                   'отношение массы протона к массе электрона' : proton_to_electron_mass_ratio,
+                                   'Отношение массы W к Z' : W_to_Z_mass_ratio,
+                                   'слабый угол смешивания' : weak_mixing_angle,
+                                   'g-фактор электрона' : electron_g_factor,
+                                   'g мюонный фактор' : muon_g_factor,
+                                   'протонный g-фактор' : proton_g_factor,
+                                   'квант циркуляции' : quantum_of_circulation,
+                                   'Магнетон Бора' : Bohr_magneton,
+                                   'ядерный магнетон' : nuclear_magneton,
+                                   'классический радиус электрона' : classical_electron_radius,
+                                   'Томсон сечение' : Thomson_cross_section, 
+                                   'Радиус Бора' : Bohr_radius,
+                                   'Энергия Хартри' : Hartree_energy,
+                                   'Ридберговская единица энергии' : Rydberg_unit_of_energy,
+                                   'Постоянная Ридберга' : Rydberg_constant,
+                                   'Константа связи Ферми' : Fermi_coupling_constant,
+                                   'Константа Авогадро' : Avogadro_constant,
+                                   'молярная газовая постоянная' : molar_gas_constant,
+                                   'Постоянная Фарадея' : Faraday_constant,
+                                   'молярная постоянная Планка' : molar_Planck_constant,
+                                   'атомная масса из углерод-12' : atomic_mass_of_carbon_12,
+                                   'молярная масса из углерод-12' : molar_mass_of_carbon_12,
+                                   'постоянная атомной массы' : atomic_mass_constant,
+                                   'постоянная молярной массы' : molar_mass_constant,
+                                   'молярный объем кремния' : molar_volume_of_silicon,
+                                   'частота сверхтонких переходов 133Cs' : hyperfine_transition_frequency_of_133Cs,
+                                   'постоянная тонкой структуры' : the_fine_structure_constant,
+                                   'Планковская масса' : Planck_mass,
+                                   'Планковская длина' : Planck_length,
+                                   'Планковское время' : Planck_time,
+                                   'Планковская температура' : Planck_temperature,
+                                   'Температура тройной точки воды' : The_temperature_of_the_triple_point_of_water,
+ 
+        }
+
+        if count >= 1:
+            with open('physical_const_passwords.txt', 'w') as file:
+                for name, value in physical_constants_dict.items():
                     file.write(f"{name} : {value}\n")
             QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
 
