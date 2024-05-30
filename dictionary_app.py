@@ -468,19 +468,12 @@ class MyApp(QWidget):
         
         a1 = 1  # Первый член
         d = 2   # Разность прогрессии
-        
+
         arithmetic_sequence = self.arithmetic_progression(a1, d, count)
-        
-        # Преобразуем числа прогрессии в строку
         arith_string = ''.join(str(num) for num in arithmetic_sequence)
-        
-        # Генерация паролей, каждый длиной до max_length символов
         passwords = [arith_string[i:i + max_length] for i in range(0, len(arith_string), max_length)]
-        
-        # Обрезаем список паролей до указанного количества
         passwords = passwords[:count]
         
-        # Записываем пароли в файл
         with open('arithmetic_progression_passwords.txt', 'w') as file:
             for idx, password in enumerate(passwords, start=1):
                 file.write(f"Password {idx}: {password}\n")
