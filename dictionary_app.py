@@ -2,9 +2,9 @@
 Используемые библиотеки
 '''
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QSpinBox, QLabel, QMessageBox, QInputDialog, QComboBox, QDialog
-from decimal import Decimal, getcontext
-from functools import reduce
+from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QSpinBox, QLabel, 
+                             QMessageBox, QInputDialog, QComboBox, QDialog, QLineEdit)
+from PyQt5.QtGui import QDoubleValidator
 import math
 from mpmath import *
 
@@ -25,7 +25,7 @@ class MyApp(QWidget):
         self.generate_button_with_square_sqrt.clicked.connect(self.generate_passwords_with_square_sqrt)
 
         self.spin_box = QSpinBox(self)
-        self.spin_box.setRange(1, 1000)  # Установка диапазона значений
+        self.spin_box.setRange(1, 999999)  # Установка диапазона значений
         self.spin_box.setValue(1)  # Значение по умолчанию
 
         self.generate_button_with_cubic_sqrt = QPushButton('Сгенерировать пароли вычислением кубического корня числа')
@@ -56,6 +56,8 @@ class MyApp(QWidget):
         self.setGeometry(500, 500, 500, 500)
 
 
+
+    # Генерация паролей на основе вычисления квадратного корня
     def generate_passwords_with_square_sqrt(self):
         count = self.spin_box.value()
         if count >= 1:
@@ -68,6 +70,8 @@ class MyApp(QWidget):
             QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
 
+
+    # Генерация паролей на основе вычисления кубического корня
     def generate_passwords_with_cubic_sqrt(self):
         count = self.spin_box.value()
         if count >= 1:
@@ -79,6 +83,9 @@ class MyApp(QWidget):
             QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
 
+
+
+    # Генерация паролей на основе математических констант
     def generate_passwords_with_math_const(self):
         count = self.spin_box.value()
         mp.dps = 63; mp.pretty = True
@@ -261,7 +268,10 @@ class MyApp(QWidget):
                     file.write(f"{name} : {value}\n")
             QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
+    
 
+
+    # Генерация паролей на основе физических констант
     def generate_passwords_with_physical_const(self):
         count = self.spin_box.value()
 
@@ -401,12 +411,20 @@ class MyApp(QWidget):
                     file.write(f"{name} : {value}\n")
             QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
+
+
+
+    # Генерация паролей на основе рекуррентных соотношений
     def generate_passwords_with_recurrent_relation(self, relation, dialog):
         dialog.accept()
         if relation == 'Последовательность Фибоначчи':
             self.generate_passwords_with_fibonacci()    
-        if relation == 'Арифметическая прогрессия':
+        elif relation == 'Арифметическая прогрессия':
             self.generate_passwords_with_arithmetic_progression()
+        elif relation == 'Последовательность с добавлением константы':
+            self.prompt_for_constant()
+        elif relation == 'Числа Каталана':
+            self.generate_passwords_with_catalan_numbers()
 
     def select_recurrent_relation(self):
         dialog = QDialog(self)
@@ -416,6 +434,8 @@ class MyApp(QWidget):
         combo_box = QComboBox(dialog)
         combo_box.addItem('Последовательность Фибоначчи')
         combo_box.addItem('Арифметическая прогрессия')
+        combo_box.addItem('Последовательность с добавлением константы')
+        combo_box.addItem('Числа Каталана')
 
         select_button = QPushButton("Выбрать", dialog)
         select_button.clicked.connect(lambda: self.generate_passwords_with_recurrent_relation(combo_box.currentText(), dialog))
@@ -428,6 +448,8 @@ class MyApp(QWidget):
         dialog.exec_()
 
 
+
+    # последовательность Фибоначчи
     def fibonacci_iterative(self, n):
         if n <= 0:
             return 0
@@ -455,7 +477,9 @@ class MyApp(QWidget):
         
         QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
+    
 
+    # арифметическая прогрессия
     def arithmetic_progression(self, a1, d, n):
         return [a1 + i * d for i in range(n)]
 
@@ -467,9 +491,9 @@ class MyApp(QWidget):
             return
         
         a1 = 1  # Первый член
-        d = 2   # Разность прогрессии
+        d = 5   # Разность прогрессии
 
-        arithmetic_sequence = self.arithmetic_progression(a1, d, count)
+        arithmetic_sequence = self.arithmetic_progression(a1, d, 100000)
         arith_string = ''.join(str(num) for num in arithmetic_sequence)
         passwords = [arith_string[i:i + max_length] for i in range(0, len(arith_string), max_length)]
         passwords = passwords[:count]
@@ -478,7 +502,97 @@ class MyApp(QWidget):
             for idx, password in enumerate(passwords, start=1):
                 file.write(f"Password {idx}: {password}\n")
         
-        QMessageBox.information(self, "Уведомление", "Пароли успешно записаны.")
+        QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
+
+
+    
+
+    # добавление констант
+    def prompt_for_constant(self):
+        dialog = QDialog(self)
+        dialog.setWindowTitle('Введите константу')
+        layout = QVBoxLayout()
+
+        const_input = QLineEdit(dialog)
+        const_input.setValidator(QDoubleValidator())  # Ограничение ввода только числами
+
+        confirm_button = QPushButton("ОК", dialog)
+        confirm_button.clicked.connect(lambda: self.generate_passwords_with_constant_addition(const_input.text(), dialog))
+
+        layout.addWidget(QLabel('Введите значение константы:'))
+        layout.addWidget(const_input)
+        layout.addWidget(confirm_button)
+
+        dialog.setLayout(layout)
+        dialog.exec_()
+
+    def generate_passwords_with_constant_addition(self, constant_value, dialog):
+        dialog.accept()
+        try:
+            const = float(constant_value)
+        except ValueError:
+            QMessageBox.warning(self, 'Ошибка', 'Пожалуйста, введите допустимое числовое значение для константы.')
+            return
+        
+        count = self.spin_box.value()
+        if count < 1:
+            QMessageBox.information(self, 'Уведомление', 'Количество паролей должно быть не менее 1.')
+            return
+        
+        start = 2  # Начальное значение
+        constant_sequence = self.constant_addition_sequence(start, const, 100000)
+        
+        # Преобразуем числа последовательности в строку
+        const_string = ''.join(str(num) for num in constant_sequence).replace('.', '')
+        
+        # Генерация паролей, каждый длиной до max_length символов
+        max_length = 64
+        passwords = [const_string[i:i + max_length] for i in range(0, len(const_string), max_length)]
+        
+        # Обрезаем список паролей до указанного количества
+        passwords = passwords[:count]
+        
+        # Записываем пароли в файл
+        with open('constant_addition_passwords.txt', 'w') as file:
+            for idx, password in enumerate(passwords, start=1):
+                file.write(f"Password {idx}: {password}\n")
+        
+        QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
+
+    def constant_addition_sequence(self, start, const, n):
+        return [start + i * const for i in range(n)]
+        
+
+    def catalan_number(self, n):
+        if n <= 1:
+            return 1
+        catalan = [0] * (n + 1)
+        catalan[0] = catalan[1] = 1
+
+        for i in range(2, n + 1):
+            catalan[i] = sum(catalan[j] * catalan[i - j - 1] for j in range(i))
+        return catalan[n]
+
+    def generate_passwords_with_catalan_numbers(self, max_length=64):
+        count = self.spin_box.value()
+
+        # Генерация последовательности чисел Каталана
+        catalan_sequence = [self.catalan_number(i) for i in range(1, 500)]
+        
+        # Преобразуем числа Каталана в строку и убираем точки
+        catalan_string = ''.join(str(num) for num in catalan_sequence).replace('.', '')
+        
+        # Генерация паролей, каждый длиной до max_length символов
+        passwords = [catalan_string[i:i + max_length] for i in range(0, len(catalan_string), max_length)]
+
+        passwords = passwords[:count]
+        
+                # Записываем пароли в файл
+        with open('numbers_catalan_passwords.txt', 'w') as file:
+            for idx, password in enumerate(passwords, start=1):
+                file.write(f"Password {idx}: {password}\n")
+        
+        QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
 
 if __name__ == '__main__':
