@@ -8,7 +8,8 @@ from PyQt5.QtGui import QDoubleValidator, QPixmap, QIcon
 from PyQt5.QtCore import Qt
 import math
 from mpmath import *
-
+import pandas as pd
+import openpyxl
     
 '''
 Программная реализация
@@ -20,147 +21,55 @@ class MyApp(QWidget):
         self.initUI()
 
         
-    # def initUI(self):
-        # layout = QVBoxLayout()
-        
-        # self.setLayout(layout)
-        # self.setWindowTitle('Генератор паролей')
-        # self.setGeometry(100, 100, 700, 700)
-
-        # # Основной виджет и макет
-        # central_widget = QWidget()
-        # self.setCentralWidget(central_widget)
-        # main_layout = QVBoxLayout(central_widget)
-
-        # # Заголовок
-        # title_label = QLabel("Генератор Паролей", self)
-        # title_label.setAlignment(Qt.AlignCenter)
-        # title_label.setStyleSheet("font-size: 24px; font-weight: bold;")
-        # main_layout.addWidget(title_label)
-
-
-
-        # self.setWindowIcon(QIcon(r"password.png")) 
-
-        # self.generate_button_with_square_sqrt = QPushButton('Сгенерировать пароли вычислением квадратного корня числа')
-        # self.generate_button_with_square_sqrt.clicked.connect(self.generate_passwords_with_square_sqrt)
-
-        # self.spin_box = QSpinBox(self)
-        # self.spin_box.setRange(1, 999999)  # Установка диапазона значений
-        # self.spin_box.setValue(1)  # Значение по умолчанию
-
-        # self.generate_button_with_cubic_sqrt = QPushButton('Сгенерировать пароли вычислением кубического корня числа')
-        # self.generate_button_with_cubic_sqrt.clicked.connect(self.generate_passwords_with_cubic_sqrt)
-
-        # self.generate_button_with_math_const = QPushButton('Сгенерировать пароли из известных математических констант')
-        # self.generate_button_with_math_const.clicked.connect(self.generate_passwords_with_math_const)
-
-        # self.generate_button_with_physical_const = QPushButton('Сгенерировать пароли из известных физических констант')
-        # self.generate_button_with_physical_const.clicked.connect(self.generate_passwords_with_physical_const)
-        
-        # self.generate_button_with_rec_relations = QPushButton('Сгенерировать пароли из рекуррентных соотношений')
-        # self.generate_button_with_rec_relations.clicked.connect(self.select_recurrent_relation)
-
-        # label1 = QLabel('Введите количество паролей, которые необходимо сгенерировать:')
-        # layout.addWidget(label1)
-        # layout.addWidget(self.spin_box)
-        # label2 = QLabel('Выберите каким способом сгенерировать пароли:')
-        # layout.addWidget(label2)
-        # layout.addWidget(self.generate_button_with_square_sqrt)
-        # layout.addWidget(self.generate_button_with_cubic_sqrt)
-        # layout.addWidget(self.generate_button_with_math_const)
-        # layout.addWidget(self.generate_button_with_physical_const)
-        # layout.addWidget(self.generate_button_with_rec_relations)
     def initUI(self):
-        self.setWindowTitle('Современное Приложение')
-        self.setGeometry(100, 100, 600, 400)
+        layout = QVBoxLayout()
+        
+        self.setLayout(layout)
+        self.setWindowTitle('Генератор паролей')
+        self.setGeometry(100, 100, 700, 700)
 
-        # Основной виджет и макет
-        central_widget = QMainWindow()
-        self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
+        self.setWindowIcon(QIcon(r"password.png")) 
 
-        # Заголовок
-        title_label = QLabel("Генератор Паролей", self)
-        title_label.setAlignment(Qt.AlignCenter)
-        title_label.setStyleSheet("font-size: 24px; font-weight: bold;")
-        main_layout.addWidget(title_label)
-
-        # Картинка
-        self.image_label = QLabel(self)
-        pixmap = QPixmap('example_image.png')  # Укажите путь к вашей картинке
-        self.image_label.setPixmap(pixmap)
-        self.image_label.setScaledContents(True)
-        self.image_label.setFixedSize(300, 200)
-        self.image_label.setAlignment(Qt.AlignCenter)
-        main_layout.addWidget(self.image_label)
-
-        # Ввод количества паролей
-        input_layout = QHBoxLayout()
-        main_layout.addLayout(input_layout)
-
-        input_label = QLabel("Количество паролей:")
-        input_label.setStyleSheet("font-size: 16px;")
-        input_layout.addWidget(input_label)
+        self.generate_button_with_square_sqrt = QPushButton('Сгенерировать пароли вычислением квадратного корня числа')
+        self.generate_button_with_square_sqrt.clicked.connect(self.generate_passwords_with_square_sqrt)
 
         self.spin_box = QSpinBox(self)
-        self.spin_box.setRange(1, 1000)
-        self.spin_box.setValue(1)
-        self.spin_box.setStyleSheet("font-size: 16px;")
-        input_layout.addWidget(self.spin_box)
+        self.spin_box.setRange(1, 999999)  # Установка диапазона значений
+        self.spin_box.setValue(1)  # Значение по умолчанию
 
-        # Кнопки генерации паролей
-        button_layout = QVBoxLayout()
-        main_layout.addLayout(button_layout)
+        self.generate_button_with_cubic_sqrt = QPushButton('Сгенерировать пароли вычислением кубического корня числа')
+        self.generate_button_with_cubic_sqrt.clicked.connect(self.generate_passwords_with_cubic_sqrt)
 
-        self.generate_button_with_geometric_progression = QPushButton("Генерация на основе геометрической прогрессии", self)
-        self.generate_button_with_geometric_progression.setStyleSheet("font-size: 16px;")
-        self.generate_button_with_geometric_progression.clicked.connect(self.generate_passwords_with_geometric_progression)
-        button_layout.addWidget(self.generate_button_with_geometric_progression)
+        self.generate_button_with_math_const = QPushButton('Сгенерировать пароли из известных математических констант')
+        self.generate_button_with_math_const.clicked.connect(self.generate_passwords_with_math_const)
 
-        self.generate_button_with_catalan_numbers = QPushButton("Генерация на основе чисел Каталана", self)
-        self.generate_button_with_catalan_numbers.setStyleSheet("font-size: 16px;")
-        self.generate_button_with_catalan_numbers.clicked.connect(self.generate_passwords_with_catalan_numbers)
-        button_layout.addWidget(self.generate_button_with_catalan_numbers)
+        self.generate_button_with_physical_const = QPushButton('Сгенерировать пароли из известных физических констант')
+        self.generate_button_with_physical_const.clicked.connect(self.generate_passwords_with_physical_const)
 
-        self.generate_button_with_constant_addition = QPushButton("Генерация на основе добавления константы", self)
-        self.generate_button_with_constant_addition.setStyleSheet("font-size: 16px;")
-        self.generate_button_with_constant_addition.clicked.connect(self.prompt_for_constant)
-        button_layout.addWidget(self.generate_button_with_constant_addition)
+        self.generate_button_with_table_bradis = QPushButton('Сгенерировать пароли из таблицы Брадиса')
+        self.generate_button_with_table_bradis.clicked.connect(self.generate_passwords_with_table_bradis)
 
-        self.setStyleSheet("""
-            QWidget {
-                background-color: #f0f0f0;
-            }
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                padding: 10px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                border-radius: 8px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-            QLineEdit, QSpinBox {
-                padding: 5px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-        """)
+        self.generate_button_with_rec_relations = QPushButton('Сгенерировать пароли из рекуррентных соотношений')
+        self.generate_button_with_rec_relations.clicked.connect(self.select_recurrent_relation)
 
+        label1 = QLabel('Введите количество паролей, которые необходимо сгенерировать:')
+        layout.addWidget(label1)
+        layout.addWidget(self.spin_box)
+        label2 = QLabel('Выберите каким способом сгенерировать пароли:')
+        layout.addWidget(label2)
+        layout.addWidget(self.generate_button_with_square_sqrt)
+        layout.addWidget(self.generate_button_with_cubic_sqrt)
+        layout.addWidget(self.generate_button_with_math_const)
+        layout.addWidget(self.generate_button_with_physical_const)
+        layout.addWidget(self.generate_button_with_table_bradis)
+        layout.addWidget(self.generate_button_with_rec_relations)
 
     # Генерация паролей на основе вычисления квадратного корня
     def generate_passwords_with_square_sqrt(self):
         count = self.spin_box.value()
         if count >= 1:
             with open('square_root_passwords.txt', 'w') as file:
+                file.write(f'Вычисление квадратного корня от номера пароля.')
                 for i in range(1, count+1):
                     # result = "{:.62f}".format(math.sqrt(i))
                     result = math.sqrt(i)
@@ -175,6 +84,7 @@ class MyApp(QWidget):
         count = self.spin_box.value()
         if count >= 1:
             with open('cubic_root_passwords.txt', 'w') as file:
+                file.write(f'Вычисление кубического корня от номера пароля.')
                 for i in range(1, count+1):
                     # result = "{:.62f}".format(pow(i, 1/3))
                     result = pow(i, 1/3)
@@ -273,6 +183,30 @@ class MyApp(QWidget):
         Foias_constant = 1.18745235112650105459
         Logarithmic_capacityo_the_unit_disk = 0.59017029950804811302
         Taniguchi_constant = 0.67823449191739197803
+        Bazilio_constant = 1.504
+        Dirichlet_constant = 1.2824
+        constant_Turing = 0.353236371854995
+        Lindelof_constant = 0.5
+        Sylvestr_constant = 2.337
+        Legendre_constant = 1.13198824
+        Rappaport_constant = 0.888899
+        The_Turing_Mainzel_constant = 0.574713
+        Dudik_constant = 0.876627
+        Bauer_constant = 1.543377
+        Golombo_constant = 0.62432998854355
+        Plat_constant = 0.927054
+        Neper_constant = 1.915319464183
+        Caprekar_constant = 6174
+        Pierce_constant = 1.291285997062663
+        Lambert_constant = 0.567143290409784
+        Euler_Brunowy_constant = 1.606695152415291
+        Homer_constant = 0.824
+        Fejer_constant = 1.202056903159594
+        constant_pi_2 = math.pi / 2
+        constant_pi_3 = math.pi / 3
+        constant_pi_4 = math.pi / 4
+        
+
 
         mathematics_constants_dict = {'Значение pi': value_pi, 
                                 'Значение tau(2pi)': value_tau, 
@@ -358,15 +292,42 @@ class MyApp(QWidget):
                                 'Постоянная Фояса' : Foias_constant,
                                 'Логарифмическая емкость единичного диска' : Logarithmic_capacityo_the_unit_disk,
                                 'Константа Танигути' : Taniguchi_constant,
+                                'Константа Базилио' : Bazilio_constant,
+                                'Константа Дирихле' : Dirichlet_constant,
+                                'Константа Тюринга' : constant_Turing,
+                                'Константа Линделофа' : Lindelof_constant,
+                                'Константа Сильвестра' : Sylvestr_constant,
+                                'Константа Лежандра' : Legendre_constant,
+                                'Константа Раппопорта' : Rappaport_constant,
+                                'Константа Тьюринга-Майнцела' : The_Turing_Mainzel_constant,
+                                'Константа Дюдика' : Dudik_constant,
+                                'Константа Бауэра' : Bauer_constant,
+                                'Константа Голомбо' : Golombo_constant,
+                                'Константа Плата' : Plat_constant,
+                                'Константа Непера' : Neper_constant,
+                                'Константа Капрекара' : Caprekar_constant,
+                                'Константа Пирса' : Pierce_constant,
+                                'Константа Ламберта' : Lambert_constant,
+                                'Константа Эйлера-Бруноуи' : Euler_Brunowy_constant,
+                                'Константа Гомера' : Homer_constant,
+                                'Константа Фейера' : Fejer_constant,
+                                'Постоянная Пи-два' : constant_pi_2,
+                                'Постоянная Пи-три' : constant_pi_3,
+                                'Постоянная Пи-четыре' : constant_pi_4,
 
                           }
 
+        # if count >= 1:
+        #     with open('mathematics_const_passwords.txt', 'w') as file:
+        #         file.write('Известные математические константы(до 64 знаков):')
+        #         for name, value in mathematics_constants_dict.items():
+        #             file.write(f"{name} : {value}\n")
+        #     QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
         if count >= 1:
-            with open('mathematics_const_passwords.txt', 'w') as file:
-                for name, value in mathematics_constants_dict.items():
-                    file.write(f"{name} : {value}\n")
-            QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
+            df = pd.DataFrame(list(mathematics_constants_dict.items()), columns=['Название константы', 'Значение'])
+            df.to_excel('mathematics_const_passwords.xlsx', index=False)
 
+            QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в Excel файл.')
     
 
 
@@ -442,43 +403,43 @@ class MyApp(QWidget):
                                    'Постоянная Планка' : Planck_constant,
                                    'Уменьшенная постоянная Планка' : reduced_Planck_constant,
                                    'Магнитная проницаемость вакуума' : vacuum_magnetic_permeability,
-                                   'характеристическое сопротивление вакуума' : characteristic_impedance_of_vacuum,
-                                   'электрическая диэлектрическая проницаемость вакуума' : vacuum_electric_permittivity,
+                                   'Характеристическое сопротивление вакуума' : characteristic_impedance_of_vacuum,
+                                   'Электрическая диэлектрическая проницаемость вакуума' : vacuum_electric_permittivity,
                                    'Постоянная Больцмана' : Boltzmann_constant,
                                    'Ньютоновская постоянная тяготения(гравитационная постоянная)' : Newtonian_constant_of_gravitation,
                                    'Кулоновская постоянная' : Coulomb_constant,
-                                   'космологическая постоянная' : cosmological_constant,
+                                   'Космологическая постоянная' : cosmological_constant,
                                    'Постоянная Стефана–Больцмана' : Stefan_Boltzmann_constant,
-                                   'первая постоянная излучения' : first_radiation_constant,
-                                   'первая постоянная излучения для спектрального сияния' : first_radiation_constant_for_spectral_radiance,
-                                   'вторая постоянная излучения' : second_radiation_constant,
+                                   'Первая постоянная излучения' : first_radiation_constant,
+                                   'Первая постоянная излучения для спектрального сияния' : first_radiation_constant_for_spectral_radiance,
+                                   'Вторая постоянная излучения' : second_radiation_constant,
                                    'Постоянная закона смещения длины волны Вина' : Wien_wavelength_displacement_law_constant,
                                    'Постоянная закона частотного смещения Вина' : Wien_frequency_displacement_law_constant,
                                    'Постоянная закона смещения энтропии Вина' : Wien_entropy_displacement_law_constant,
-                                   'элементарный заряд' : elementary_charge,
-                                   'квант проводимости' : conductance_quantum,
-                                   'квант обратной проводимости' : inverse_conductance_quantum,
+                                   'Элементарный заряд' : elementary_charge,
+                                   'Квант проводимости' : conductance_quantum,
+                                   'Квант обратной проводимости' : inverse_conductance_quantum,
                                    'Постоянная вон Клицинга' : von_Klitzing_constant,
                                    'Константа Джозефсона' : Josephson_constant,
-                                   'квант магнитного потока' : magnetic_flux_quantum,
-                                   'константа тонкой структуры' : fine_structure_constant,
-                                   'обратная константа тонкой структуры' : inverse_fine_structure_constant,
-                                   'масса электрона' : electron_mass,
-                                   'масса мюона' : muon_mass,
-                                   'масса тау' : tau_mass,
-                                   'масса протона' : proton_mass,
-                                   'масса нейтрона' : neutron_mass,
-                                   'масса верхнего кварка' : top_quark_mass,
-                                   'отношение массы протона к массе электрона' : proton_to_electron_mass_ratio,
+                                   'Квант магнитного потока' : magnetic_flux_quantum,
+                                   'Константа тонкой структуры' : fine_structure_constant,
+                                   'Обратная константа тонкой структуры' : inverse_fine_structure_constant,
+                                   'Масса электрона' : electron_mass,
+                                   'Масса мюона' : muon_mass,
+                                   'Масса тау' : tau_mass,
+                                   'Масса протона' : proton_mass,
+                                   'Масса нейтрона' : neutron_mass,
+                                   'Масса верхнего кварка' : top_quark_mass,
+                                   'Отношение массы протона к массе электрона' : proton_to_electron_mass_ratio,
                                    'Отношение массы W к Z' : W_to_Z_mass_ratio,
-                                   'слабый угол смешивания' : weak_mixing_angle,
+                                   'Слабый угол смешивания' : weak_mixing_angle,
                                    'g-фактор электрона' : electron_g_factor,
                                    'g мюонный фактор' : muon_g_factor,
-                                   'протонный g-фактор' : proton_g_factor,
-                                   'квант циркуляции' : quantum_of_circulation,
+                                   'Протонный g-фактор' : proton_g_factor,
+                                   'Квант циркуляции' : quantum_of_circulation,
                                    'Магнетон Бора' : Bohr_magneton,
-                                   'ядерный магнетон' : nuclear_magneton,
-                                   'классический радиус электрона' : classical_electron_radius,
+                                   'Ядерный магнетон' : nuclear_magneton,
+                                   'Классический радиус электрона' : classical_electron_radius,
                                    'Томсон сечение' : Thomson_cross_section, 
                                    'Радиус Бора' : Bohr_radius,
                                    'Энергия Хартри' : Hartree_energy,
@@ -486,16 +447,16 @@ class MyApp(QWidget):
                                    'Постоянная Ридберга' : Rydberg_constant,
                                    'Константа связи Ферми' : Fermi_coupling_constant,
                                    'Константа Авогадро' : Avogadro_constant,
-                                   'молярная газовая постоянная' : molar_gas_constant,
+                                   'Молярная газовая постоянная' : molar_gas_constant,
                                    'Постоянная Фарадея' : Faraday_constant,
-                                   'молярная постоянная Планка' : molar_Planck_constant,
-                                   'атомная масса из углерод-12' : atomic_mass_of_carbon_12,
-                                   'молярная масса из углерод-12' : molar_mass_of_carbon_12,
-                                   'постоянная атомной массы' : atomic_mass_constant,
-                                   'постоянная молярной массы' : molar_mass_constant,
-                                   'молярный объем кремния' : molar_volume_of_silicon,
-                                   'частота сверхтонких переходов 133Cs' : hyperfine_transition_frequency_of_133Cs,
-                                   'постоянная тонкой структуры' : the_fine_structure_constant,
+                                   'Молярная постоянная Планка' : molar_Planck_constant,
+                                   'Атомная масса из углерод-12' : atomic_mass_of_carbon_12,
+                                   'Молярная масса из углерод-12' : molar_mass_of_carbon_12,
+                                   'Постоянная атомной массы' : atomic_mass_constant,
+                                   'Постоянная молярной массы' : molar_mass_constant,
+                                   'Молярный объем кремния' : molar_volume_of_silicon,
+                                   'Частота сверхтонких переходов 133Cs' : hyperfine_transition_frequency_of_133Cs,
+                                   'Постоянная тонкой структуры' : the_fine_structure_constant,
                                    'Планковская масса' : Planck_mass,
                                    'Планковская длина' : Planck_length,
                                    'Планковское время' : Planck_time,
@@ -504,13 +465,46 @@ class MyApp(QWidget):
  
         }
 
+        # if count >= 1:
+        #     with open('physical_const_passwords.txt', 'w') as file:
+        #         file.write('Физические константы(до 64 знаков):')
+        #         for name, value in physical_constants_dict.items():
+        #             file.write(f"{name} : {value}\n")
+        #     QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
+        
         if count >= 1:
-            with open('physical_const_passwords.txt', 'w') as file:
-                for name, value in physical_constants_dict.items():
-                    file.write(f"{name} : {value}\n")
-            QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
+            df = pd.DataFrame(list(physical_constants_dict.items()), columns=['Название константы', 'Значение'])
+            df.to_excel('physical_const_passwords.xlsx', index=False)
+
+            QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в Excel файл.')
 
 
+    # Таблица Брадиса
+    def generate_passwords_with_table_bradis(self):
+        bradis_table = {}
+        for angle in range(0, 91):  # Углы от 0 до 90 градусов
+            rad = math.radians(angle)
+            bradis_table[angle] = {
+        'sin': round(math.sin(rad), 8),
+        'cos': round(math.cos(rad), 8),
+        'tan': round(math.tan(rad), 8) if angle != 90 else 'inf',  # tan 90° -> бесконечность
+        'cot': round(1 / math.tan(rad), 8) if angle != 0 else 'inf'  # cot 0° -> бесконечность
+    }
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.append(['Угол (градусы)', 'sin', 'cos', 'tan', 'cot'])
+
+        for angle, values in bradis_table.items():
+            ws.append([angle, values['sin'], values['cos'], values['tan'], values['cot']])
+
+
+        file_path = 'bradis_table_passwords.xlsx'
+        wb.save(file_path)
+
+        QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в Excel файл.')
+
+    
 
 
     # Генерация паролей на основе рекуррентных соотношений
@@ -569,13 +563,15 @@ class MyApp(QWidget):
             return
         
         fibonacci_sequence = self.fibonacci_iterative(count)
-        fib_string = ''.join(str(num) for num in fibonacci_sequence)
+        fib_string = ''.join(str(num) for num in fibonacci_sequence).replace('.', '')     
         passwords = [fib_string[i:i + max_length] for i in range(0, len(fib_string), max_length)]  
         passwords = passwords[:count]
         
         with open('fibonacci_sequences_passwords.txt', 'w') as file:
+            file.write('Числа Фибоначчи - последовательность чисел, где каждое последующее число является суммой двух предшествующих.'
+                       'Каждый новый пароль - это 64 символа от последовательности Фибоначчи:\n')
             for idx, password in enumerate(passwords, start=1):
-                file.write(f"Password {idx}: {password}\n")
+                file.write(f"Password with fibonacci sequences {idx}: {password}\n")
         
         QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
@@ -601,8 +597,9 @@ class MyApp(QWidget):
         passwords = passwords[:count]
         
         with open('arithmetic_progression_passwords.txt', 'w') as file:
+            file.write('Каждый новый пароль - это 64 символа от арифметической последовательности, причем первый член равен 1, разность прогрессии равна 5.:\n')
             for idx, password in enumerate(passwords, start=1):
-                file.write(f"Password {idx}: {password}\n")
+                file.write(f'Password with arithmetic progression {idx}: {password}\n')
         
         QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
@@ -627,8 +624,10 @@ class MyApp(QWidget):
         passwords = passwords[:number_passwords]
                 
         with open('geometric_progression_passwords.txt', 'w') as file:
+            file.write('Каждый новый пароль - это 64 символа геометричекой прогрессии, '
+                       'причем начало 2, знаменатель прогрессии 3, степень определяется от 1 с шагом 1:\n')
             for idx, password in enumerate(passwords, start=1):
-                file.write(f"Password {idx}: {password}\n")
+                file.write(f"Password with geometric progression {idx}: {password}\n")
         
         QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
@@ -682,8 +681,10 @@ class MyApp(QWidget):
         
         # Записываем пароли в файл
         with open('constant_addition_passwords.txt', 'w') as file:
+            file.write('Каждый новый пароль высчитывается из отношения сложения начального заданного значения и'
+                       'номера пароля, возведенного в степень введенного константного значения:\n')
             for idx, password in enumerate(passwords, start=1):
-                file.write(f"Password {idx}: {password}\n")
+                file.write(f'Password with constant addition {idx}: {password}\n')
         
         QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
@@ -718,10 +719,12 @@ class MyApp(QWidget):
 
         passwords = passwords[:count]
         
-                # Записываем пароли в файл
+        # Записываем пароли в файл
         with open('numbers_catalan_passwords.txt', 'w') as file:
+            file.write(f'Числа Каталана — последовательность, в которой n-ное число выражается формулой C(n) = (2n)!/ (n! (n+1)!).'
+                       'Каждый новый пароль - это 64 символа от этой последовательности.\n')
             for idx, password in enumerate(passwords, start=1):
-                file.write(f"Password {idx}: {password}\n")
+                file.write(f"Password with numbers catalan {idx}: {password}\n")
         
         QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
 
