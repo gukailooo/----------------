@@ -10,6 +10,8 @@ import math
 from mpmath import *
 import pandas as pd
 import openpyxl
+from decimal import Decimal
+
     
 '''
 Программная реализация
@@ -46,21 +48,27 @@ class MyApp(QWidget):
         self.generate_button_with_physical_const = QPushButton('Сгенерировать пароли из известных физических констант')
         self.generate_button_with_physical_const.clicked.connect(self.generate_passwords_with_physical_const)
 
+        self.generate_button_with_chemical_const = QPushButton('Сгенерировать пароли из известных химических констант')
+        self.generate_button_with_chemical_const.clicked.connect(self.generate_passwords_with_chemical_const)
+
         self.generate_button_with_table_bradis = QPushButton('Сгенерировать пароли из таблицы Брадиса')
         self.generate_button_with_table_bradis.clicked.connect(self.generate_passwords_with_table_bradis)
 
         self.generate_button_with_rec_relations = QPushButton('Сгенерировать пароли из рекуррентных соотношений')
         self.generate_button_with_rec_relations.clicked.connect(self.select_recurrent_relation)
-
-        label1 = QLabel('Введите количество паролей, которые необходимо сгенерировать:')
+        label1 = QLabel('Выберите какие :')
         layout.addWidget(label1)
+        layout.addWidget(self.generate_button_with_math_const)
+        layout.addWidget(self.generate_button_with_physical_const)
+        layout.addWidget(self.generate_button_with_chemical_const)
+        label2 = QLabel('Введите количество паролей, которые необходимо сгенерировать:')
+        layout.addWidget(label2)
         layout.addWidget(self.spin_box)
         label2 = QLabel('Выберите каким способом сгенерировать пароли:')
         layout.addWidget(label2)
         layout.addWidget(self.generate_button_with_square_sqrt)
         layout.addWidget(self.generate_button_with_cubic_sqrt)
-        layout.addWidget(self.generate_button_with_math_const)
-        layout.addWidget(self.generate_button_with_physical_const)
+
         layout.addWidget(self.generate_button_with_table_bradis)
         layout.addWidget(self.generate_button_with_rec_relations)
 
@@ -96,7 +104,7 @@ class MyApp(QWidget):
 
     # Генерация паролей на основе математических констант
     def generate_passwords_with_math_const(self):
-        count = self.spin_box.value()
+        # count = self.spin_box.value()
         mp.dps = 63; mp.pretty = True
 
         value_pi = +pi # Отношение длины окружности к ее диаметру
@@ -105,7 +113,7 @@ class MyApp(QWidget):
         Connective_constant_for_the_hexagonal_lattice = math.sqrt(2+math.sqrt(2))
         KeplerBouwkamp_constant = 0.11494204485329620070
         Wallis_constant = pow(((45-math.sqrt(1929)) / 18), 1/3) + pow(((45+math.sqrt(1929)) / 18), 1/3)
-        the_number_e = math.e
+        the_number_e = 2.71828182845904523536028747135266249775724709369995957496696763
         the_natural_logarithm_of_two = math.log(2)
         Lemniscate_constant = 2.62205755429211981046
         Eulers_constant = 0.57721566490153286060
@@ -323,17 +331,19 @@ class MyApp(QWidget):
         #         for name, value in mathematics_constants_dict.items():
         #             file.write(f"{name} : {value}\n")
         #     QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
-        if count >= 1:
-            df = pd.DataFrame(list(mathematics_constants_dict.items()), columns=['Название константы', 'Значение'])
-            df.to_excel('mathematics_const_passwords.xlsx', index=False)
+        # if count >= 1:
+        for key in mathematics_constants_dict:
+            mathematics_constants_dict[key] = format(mathematics_constants_dict[key], '.64f')
+        df = pd.DataFrame(list(mathematics_constants_dict.items()), columns=['Название константы', 'Значение'])
+        df.to_csv('mathematics_const_passwords.csv', index=False, sep=';')
 
-            QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в Excel файл.')
+        QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в csv файл.')
     
 
 
     # Генерация паролей на основе физических констант
     def generate_passwords_with_physical_const(self):
-        count = self.spin_box.value()
+        # count = self.spin_box.value()
 
         speed_of_light_in_vacuum = 299792458
         Planck_constant = 6.62607015e-34
@@ -397,7 +407,7 @@ class MyApp(QWidget):
         Planck_length = 1.616255e-35
         Planck_time = 5.391247e-44
         Planck_temperature = 1.416784
-        The_temperature_of_the_triple_point_of_water = 273,16
+        The_temperature_of_the_triple_point_of_water = 273.16
 
         physical_constants_dict = {'Скорость света в вакууме' : speed_of_light_in_vacuum,
                                    'Постоянная Планка' : Planck_constant,
@@ -472,11 +482,184 @@ class MyApp(QWidget):
         #             file.write(f"{name} : {value}\n")
         #     QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны.')
         
-        if count >= 1:
-            df = pd.DataFrame(list(physical_constants_dict.items()), columns=['Название константы', 'Значение'])
-            df.to_excel('physical_const_passwords.xlsx', index=False)
+        # if count >= 1:
 
-            QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в Excel файл.')
+        for key, value in physical_constants_dict.items():
+            physical_constants_dict[key] = format(Decimal(value), 'f')
+        df = pd.DataFrame(list(physical_constants_dict.items()), columns=['Название константы', 'Значение'])
+        df.to_csv('physical_const_passwords.csv', index=False, sep=';')
+
+        QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в csv файл.')
+
+
+    def generate_passwords_with_chemical_const(self):
+        # count = self.spin_box.value()
+        
+        Avogadro_constant = 602214076000000000000000
+        The_speed_of_light_in_a_vacuum = 299792458
+        Planck_constant = 0.0000000000000000000000000000006626
+        Elementary_charge = 0.000000000000000000160217662
+        The_mass_of_the_electron = 0.0000000000000000000000000000009109
+        Proton_mass = 0.0000000000000000000000000016726219
+        Neutron_mass = 0.0000000000000000000000000016749275 
+        Boltzmann_constant = 0.00000000000000000000000001380649
+        Gas_constant = 8.31446261815324
+        Faraday_constant = 96485.3321233100184
+        Rydberg_constant = 10973731.568160
+        The_Stefan_Boltzmann_constant = 0.00000005670373
+        density_Water_at_25_C = 997 
+        density_Ethanol = 789 
+        density_Methane = 0.717 
+        density_Iron = 7874 
+        density_Silicon_oxide = 2200 
+        density_Sodium = 970 
+        density_Oxygen = 1.429 
+        density_Helium = 0.1785 
+        density_Carbon_dioxide = 1.977 
+        density_Sulfur = 1960 
+        density_Aluminum = 2700 
+        density_Copper = 8960 
+        density_Zinc = 7135 
+        density_Lead = 11340 
+        density_Glycerin = 1261 
+        density_Rapeseed_oil = 900 
+        density_Acetone = 791 
+        density_Chloroform = 1.478 
+        density_Olive_oil = 920 
+        density_Sunflower_oil = 920 
+        density_Coconut_oil = 925 
+        density_Castor_oil = 961 
+        density_Methyl_alcohol = 792 
+        density_Isopropyl_alcohol = 785 
+        density_Ethyl_alcohol = 789 
+        density_Coffee = 1000 
+        density_Milk = 1027 
+        density_Condensed_milk = 1350 
+        density_Concentrated_orange_juice = 1090 
+        density_Apple_juice = 1070 
+        density_Grape_juice = 1090 
+        density_Honey = 1360 
+        density_Cellular_honey = 840 
+        density_Plastic = 1380  
+        density_Cellulose_Acetate = 1.30 
+        density_Nitrocellulose = 1.66 
+        density_Starch = 1.5 
+        density_Copperalloy = 8.400 
+        density_Tin_alloy = 7.400 
+        density_Cast_iron = 7.200 
+        density_Steel = 7800 
+        density_Magnesium = 1738 
+        density_Platinum = 21450 
+        density_Amalgam = 13.500 
+        density_Nickel_silver = 10500 
+        density_Polystyrene = 1040 
+        density_Polyethylene = 910 
+        density_Polypropylene = 910 
+        density_Polyvinyl_Chloride = 1400
+        density_Sugar = 1586 
+        density_Kitchen_salt = 2160 
+        density_Magnesia = 1738 
+        density_Calcium =  1550 
+        density_Gold = 19300 
+        density_Diamond = 3500 
+        density_Marble = 2700 
+        density_Granite = 2600 
+        density_Sand = 1600 
+        density_Ice = 920 
+        density_Glass_regular = 2500 
+        density_Glass_pyrex = 2230 
+        density_Soap = 900 
+        density_Air_at_n_o = 1.225
+        density_Sulfuric_acid = 1840
+        density_Potassium = 860
+        density_Phosphorus = 1823
+
+
+        chemical_constants_dict = {
+                                    'Постоянная Авогадро':  Avogadro_constant,
+                                    'Скорость света в вакууме': The_speed_of_light_in_a_vacuum,
+                                    'Постоянная Планка': Planck_constant,
+                                    'Элементарный заряд': Elementary_charge,
+                                    'Масса электрона': The_mass_of_the_electron,
+                                    'Масса протона': Proton_mass,
+                                    'Масса нейтрона': Neutron_mass,
+                                    'Больцмановская постоянная': Boltzmann_constant,
+                                    'Газовая постоянная': Gas_constant,
+                                    'Постоянная Фарадея': Faraday_constant,
+                                    'Постоянная Ридберга': Rydberg_constant,
+                                    'Постоянная Стефана-Больцмана': The_Stefan_Boltzmann_constant,
+                                    'Плотность воды (при 25°C)': density_Water_at_25_C,
+                                    'Плотность этанола': density_Ethanol,
+                                    'Плотность метана': density_Methane,
+                                    'Плотность железа': density_Iron,
+                                    'Плотность оксида кремния': density_Silicon_oxide,
+                                    'Плотность натрия': density_Sodium,
+                                    'Плотность кислорода': density_Oxygen,
+                                    'Плотность гелия': density_Helium,
+                                    'Плотность углекислого газа': density_Carbon_dioxide,
+                                    'Плотность серы': density_Sulfur,
+                                    'Плотность алюминия': density_Aluminum,
+                                    'Плотность меди': density_Copper,
+                                    'Плотность цинка': density_Zinc,
+                                    'Плотность свинца': density_Lead,
+                                    'Плотность глицерина': density_Glycerin,
+                                    'Плотность рапсового масла': density_Rapeseed_oil,
+                                    'Плотность ацетона': density_Acetone,
+                                    'Плотность хлороформа': density_Chloroform,
+                                    'Плотность оливкового масла': density_Olive_oil,
+                                    'Плотность подсолнечного масла': density_Sunflower_oil,
+                                    'Плотность кокосового масла': density_Coconut_oil,
+                                    'Плотность касторового масла': density_Castor_oil,
+                                    'Плотность метилового спирта': density_Methyl_alcohol,
+                                    'Плотность изопропилового спирта': density_Isopropyl_alcohol,
+                                    'Плотность этилового спирта': density_Ethyl_alcohol,
+                                    'Плотность раствора кофе': density_Coffee,
+                                    'Плотность молока': density_Milk,
+                                    'Плотность сгущенного молока': density_Condensed_milk,
+                                    'Плотность концентрированного апельсинового сока':  density_Concentrated_orange_juice,
+                                    'Плотность яблочного сока': density_Apple_juice,
+                                    'Плотность виноградного сока': density_Grape_juice,
+                                    'Плотность меда': density_Honey,
+                                    'Плотность сотового меда': density_Cellular_honey,
+                                    'Плотность пластмассы': density_Plastic,
+                                    'Плотность ацетата целлюлозы': density_Cellulose_Acetate,
+                                    'Плотность нитроцеллюлоза': density_Nitrocellulose,
+                                    'Плотность крахмала': density_Starch,
+                                    'Плотность медного сплава': density_Copperalloy,
+                                    'Плотность оловянного сплава': density_Tin_alloy,
+                                    'Плотность чугуна': density_Cast_iron,
+                                    'Плотность стали': density_Steel,
+                                    'Плотность магния': density_Magnesium,
+                                    'Плотность платины': density_Platinum,
+                                    'Плотность амальгамы': density_Amalgam,
+                                    'Плотность нейзильбера': density_Nickel_silver,
+                                    'Плотность полистирола': density_Polystyrene,
+                                    'Плотность полиэтилена': density_Polyethylene,
+                                    'Плотность полипропилена': density_Polypropylene,
+                                    'Плотность поливинилхлорида (ПВХ)': density_Polyvinyl_Chloride,
+                                    'Плотность сахара': density_Sugar,
+                                    'Плотность кухонной соли': density_Kitchen_salt,
+                                    'Плотность магнезия': density_Magnesia,
+                                    'Плотность кальция': density_Calcium,
+                                    'Плотность золота': density_Gold,
+                                    'Плотность алмаза': density_Diamond,
+                                    'Плотность мрамора': density_Marble,
+                                    'Плотность гранита': density_Granite,
+                                    'Плотность песка': density_Sand,
+                                    'Плотность льда': density_Ice,
+                                    'Плотность обычного стекла': density_Glass_regular,
+                                    'Плотность стекла (пирекс)': density_Glass_pyrex,
+                                    'Плотность мыла': density_Soap,
+                                    'Плотность воздуха': density_Air_at_n_o,
+                                    'Плотность фосфора': density_Phosphorus,
+
+        }
+
+        # if count >= 1:
+        df = pd.DataFrame(list(chemical_constants_dict.items()), columns=['Название константы', 'Значение'])
+        df.to_csv('chemical_const_passwords.csv', index=False, sep=';')
+
+        QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в csv файл.')        
 
 
     # Таблица Брадиса
@@ -505,7 +688,6 @@ class MyApp(QWidget):
         QMessageBox.information(self, 'Уведомление', 'Пароли успешно записаны в Excel файл.')
 
     
-
 
     # Генерация паролей на основе рекуррентных соотношений
     def generate_passwords_with_recurrent_relation(self, relation, dialog):
